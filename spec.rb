@@ -18,7 +18,7 @@ class Spec < Test::Unit::TestCase
   def test_the_entire_game
     initial_game_state = Game.new(:X, Array.new(9))
     game_strategy = GameStrategy.new
-    game_strategy.generate_moves(initial_game_state)
+    game_strategy.simulate_all_moves(initial_game_state)
     assert(initial_game_state.current_player == :X)
     # since the player is x, it should be able to call it's next move and the first position of the board in the array is x
     next_game_state = initial_game_state.next_move
@@ -88,6 +88,6 @@ class Spec < Test::Unit::TestCase
 
   def test_create_future_games
     game_runner = GameStrategy.new
-    assert_not_nil(game_runner.generate)
+    assert_not_nil(game_runner.simulate)
   end
 end

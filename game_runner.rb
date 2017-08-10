@@ -33,7 +33,7 @@ end
 
 class GameRunner
   def initialize(fake_game)
-    @game = fake_game.nil? ? GameStrategy.new.generate : fake_game
+    @game = fake_game.nil? ? GameStrategy.new.simulate : fake_game
     @permanent_state = @game
     @projection = Projection.new
   end
