@@ -48,7 +48,7 @@ class GameRunner
     end
 
     if @game.current_player == :X
-      @game = @game.next_move
+      @game = @game.next_best_move
       puts "Board after Computer's move:"
       @projection.display_board(@game)
       play_the_game

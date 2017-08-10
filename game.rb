@@ -39,10 +39,10 @@ class Game
     @score = final_score || intermediate_score
   end
 
-  def next_move
-    result =  moves.map{|x| x.score}
-    print result
-    moves.max {|a, b| a.score <=> b.score}
+  def next_best_move
+    result = moves.map {|x| x.score}
+    result_max = result.each_with_index.max[1]
+    moves[result_max]
   end
 
   def final_score

@@ -16,30 +16,18 @@ class Spec < Test::Unit::TestCase
   end
 
   def test_the_entire_game
-    initial_game_state = Game.new(:X, Array.new(9))
-    game_strategy = GameStrategy.new
-    game_strategy.simulate_all_moves(initial_game_state)
-    assert(initial_game_state.current_player == :X)
-    # since the player is x, it should be able to call it's next move and the first position of the board in the array is x
-    next_game_state = initial_game_state.next_move
-    # after the first move, deterministically the first move is the first position in the array.
-    assert(next_game_state.board[0] == :X)
-    # after the first move done by the computer the state of the game will have the current player as user.
-    assert(next_game_state.current_player == :O)
-    assert_not_nil(next_game_state.get_node_in_move_tree(1))
-    # updating the game with the new move, which is made by the user
-    next_game_state = next_game_state.get_node_in_move_tree(1)
-    assert(next_game_state.board[1] == :O)
-    # switch the player to computer
-    assert(next_game_state.current_player == :X)
-    # computer playing the next game, so this is not handled as part of the game. the client has the flexibility to choose
-    next_game_state = next_game_state.next_move
-    # next move would be close to the first position of X which was 0, 1 is already acquired by :O
-    # the move will be either 3 or 4
-    assert(next_game_state.board[3] == :X || next_game_state.board[4] == :X)
-    # to revert back to this state
     # creating a projection instance to see if all the functions in projection works fine``
     projection = Projection.new
+    initial_game_state = Game.new(:X, [:X, :O, nil, nil, nil, nil, nil, nil, nil])
+    game_strategy = GameStrategy.new
+    game_strategy.simulate_all_moves(initial_game_state)
+    # since the player is x, it should be able to call it's next move and the first position of the board in the array is x
+    # computer playing the next game, so this is not handled as part of the game. the client has the flexibility to choose
+    next_game_state = initial_game_state.next_best_move
+    projection.display_board(next_game_state)
+    # next move would be close to the max index as close to the initial position.
+    assert(next_game_state.board[6] == :X || next_game_state.board[8] == :X)
+    # to revert back to this state
     assert(next_game_state.current_player == :O)
     assert_nil (projection.display_board(next_game_state))
     # user switching to second position
@@ -48,7 +36,7 @@ class Spec < Test::Unit::TestCase
     assert(next_game_state.current_player == :X)
     # Since user moved to a wrong position (bad move from user), computer will now go to either 6 (if previous was 4)
     # or 8 if previous was
-    next_game_state = next_game_state.next_move
+    next_game_state = next_game_state.next_best_move
     puts  ('testing the projection of the board during an intermediate move')
     assert_nil(projection.display_board(next_game_state))
     assert(next_game_state.board[6] == :X || next_game_state.board[8] == :X || next_game_state.board[4] == :X)
@@ -56,7 +44,7 @@ class Spec < Test::Unit::TestCase
     save_this_state = next_game_state
     # if user selects 5, computer will select 8 or 6 and win. If user selects 8, computer will select 5 or 6 and win
     next_game_state = next_game_state.get_node_in_move_tree(5)
-    next_game_state = next_game_state.next_move
+    next_game_state = next_game_state.next_best_move
     puts('projecting as part of testing the final win')
     projection.display_board(next_game_state)
     assert(next_game_state.board[8] == :X || next_game_state.board[6] == :X)
@@ -64,9 +52,18 @@ class Spec < Test::Unit::TestCase
     puts ('switching back to a previous state of the board. This will be a nice test. Nice that it ended up working')
     next_game_state = save_this_state
     projection.display_board(next_game_state)
-    next_game_state = next_game_state.get_node_in_move_tree(8)
-    next_game_state = next_game_state.next_move
+    next_game_state = next_game_state.get_node_in_move_tree(7)
+    projection.display_board(next_game_state)
+    next_game_state = next_game_state.next_best_move
     assert(next_game_state.board[5] == :X || next_game_state.board[6] == :X)
+  end
+
+  def test_an_intermediate_game
+    game_strategy = GameStrategy.new
+    board = [:O, nil, :X, :X, nil, nil, :X, :O, :O]
+    fake_game = Game.new(:X, board)
+    game_strategy.simulate_all_moves(fake_game)
+    assert_equal [-1, 1, -1], fake_game.moves.map{|x|x.score}
   end
 
   def test_game_over
