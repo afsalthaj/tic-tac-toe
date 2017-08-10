@@ -74,6 +74,7 @@ open index.html
 * It seems the algorithm selected is quite advanced, and is not scalable.
 * The first iteration of every game starts in 20 seconds, which is not so good.
 * Remove command line and include a canvas
+* The first selection of player carried over to the rest of the games. This is to be made flexible
 * Mock command line input output testing rspec
 
 # Reference

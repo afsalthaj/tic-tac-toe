@@ -85,6 +85,6 @@ class Spec < Test::Unit::TestCase
 
   def test_create_future_games
     game_runner = GameStrategy.new
-    assert_not_nil(game_runner.simulate)
+    assert_not_nil(game_runner.simulate(:X))
   end
 end

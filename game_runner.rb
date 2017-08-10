@@ -32,8 +32,8 @@ class Projection
 end
 
 class GameRunner
-  def initialize(fake_game)
-    @game = fake_game.nil? ? GameStrategy.new.simulate : fake_game
+  def initialize(player, fake_game)
+    @game = fake_game.nil? ? GameStrategy.new.simulate(player) : fake_game
     @permanent_state = @game
     @projection = Projection.new
   end
