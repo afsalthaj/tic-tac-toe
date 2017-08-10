@@ -15,6 +15,36 @@ class Spec < Test::Unit::TestCase
     assert_equal :O, super_game.winner
   end
 
+  def test_an_intermediate_game
+    game_strategy = GameStrategy.new
+    board = [:O, nil, :X, :X, nil, nil, :X, :O, :O]
+    fake_game = Game.new(:X, board)
+    game_strategy.simulate_all_moves(fake_game)
+    assert_equal [-1, 1, -1], fake_game.moves.map{|x|x.score}
+  end
+
+  def test_game_over
+    board = (0 ... 9 ).map {|_| :X}
+    game = Game.new(:X, board)
+    assert_not_nil ( game.game_over?)
+    super_game = Game.new(:X, [:O, :O, :O, nil, nil, nil, nil, nil, nil])
+    assert_not_nil(false, super_game.game_over?)
+  end
+
+  def test_game_won
+    board = [:X, nil, nil, nil, :X, nil, nil, nil, :X]
+    game = Game.new(:X, board)
+    assert (game.game_won? :X)
+    board = [:X, nil, nil, nil, nil, nil, nil, nil, :X]
+    game = Game.new(:X, board)
+    assert (!game.game_won?(:X))
+  end
+
+  def test_create_future_games
+    game_runner = GameStrategy.new
+    assert_not_nil(game_runner.simulate(:X))
+  end
+
   def test_the_entire_game
     # creating a projection instance to see if all the functions in projection works fine``
     projection = Projection.new
@@ -56,35 +86,5 @@ class Spec < Test::Unit::TestCase
     projection.display_board(next_game_state)
     next_game_state = next_game_state.next_best_move
     assert(next_game_state.board[5] == :X || next_game_state.board[6] == :X)
-  end
-
-  def test_an_intermediate_game
-    game_strategy = GameStrategy.new
-    board = [:O, nil, :X, :X, nil, nil, :X, :O, :O]
-    fake_game = Game.new(:X, board)
-    game_strategy.simulate_all_moves(fake_game)
-    assert_equal [-1, 1, -1], fake_game.moves.map{|x|x.score}
-  end
-
-  def test_game_over
-    board = (0 ... 9 ).map {|_| :X}
-    game = Game.new(:X, board)
-    assert_not_nil ( game.game_over?)
-    super_game = Game.new(:X, [:O, :O, :O, nil, nil, nil, nil, nil, nil])
-    assert_not_nil(false, super_game.game_over?)
-  end
-
-  def test_game_won
-    board = [:X, nil, nil, nil, :X, nil, nil, nil, :X]
-    game = Game.new(:X, board)
-    assert (game.game_won? :X)
-    board = [:X, nil, nil, nil, nil, nil, nil, nil, :X]
-    game = Game.new(:X, board)
-    assert (!game.game_won?(:X))
-  end
-
-  def test_create_future_games
-    game_runner = GameStrategy.new
-    assert_not_nil(game_runner.simulate(:X))
   end
 end
