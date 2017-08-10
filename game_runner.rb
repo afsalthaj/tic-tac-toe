@@ -56,7 +56,6 @@ class GameRunner
       right_move_from_user
       puts 'Board after your move:'
       @projection.display_board(@game)
-      puts ""
       play_the_game
     end
   end
