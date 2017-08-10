@@ -32,9 +32,13 @@ else minimum.
 * The computer player is hard-coded as :X and the user is identified as :O
 
 ## Pros 
-* Minimax algorithm is fairly intuitive in nature though it sounds a bit advanced, 
-and lets you build a recursive algorithm and lets you build the game with less code
+* Minimax algorithm is fairly intuitive and recursive.
+* Lets you build a strategy to win the game.
 * Computer always wins!
+
+## Cons
+* Not so intuitive in code
+* First stage computations taking time. Depth factor can be incorporated.
 
 # Game Runner
 Game Runner is sort of a client of Tic tac toe `Game` that makes use
