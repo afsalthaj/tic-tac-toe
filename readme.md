@@ -47,12 +47,6 @@ Game class is responsible for keeping track of the state of the game.
 Obviously state of the game is represented by the player, the board and the 
 complete set of moves available at a point in time.
 
-# TODO
-* It seems the algorithm selected is quite advanced, and is not scalable.
-* The first iteration of every game starts in 20 seconds, which is not so good.
-* Remove command line and include a canvas
-* Mock command line input output testing rspec
-
 # Test Coverage
 * All that I did here is, simulating a game in test case, and asserting each moves/possible moves.
 * Asserting each move/possible move is done intuitively and did't focus much on min-max algorithm.
@@ -76,6 +70,11 @@ cd coverage
 open index.html
 
 ```
+# Todo:
+* It seems the algorithm selected is quite advanced, and is not scalable.
+* The first iteration of every game starts in 20 seconds, which is not so good.
+* Remove command line and include a canvas
+* Mock command line input output testing rspec
 
 # Reference
 * https://www.quora.com/Is-there-a-simple-explanation-of-a-minimax-algorithm 
