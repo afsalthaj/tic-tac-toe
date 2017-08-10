@@ -74,6 +74,6 @@ open index.html
 ```
 
 # Reference
+* https://www.quora.com/Is-there-a-simple-explanation-of-a-minimax-algorithm 
 * https://www.youtube.com/watch?v=zDskcx8FStA
-* https://www.quora.com/Is-there-a-simple-explanation-of-a-minimax-algorithm
-* https://en.wikipedia.org/wiki/Minimax (as a last resort)
+* https://en.wikipedia.org/wiki/Minimax
