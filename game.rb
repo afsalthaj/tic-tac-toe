@@ -91,7 +91,8 @@ class GameStrategy
   end
 
   def simulate
-    first_game = Game.new(:X, Array.new(9))
+    board = Array.new(9)
+    first_game = Game.new(:X, board)
     simulate_all_moves(first_game)
     first_game
   end
