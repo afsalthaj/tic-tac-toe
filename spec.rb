@@ -1,3 +1,5 @@
+require 'simplecov'
+SimpleCov.start
 require './game'
 require './game_runner'
 require 'test/unit'

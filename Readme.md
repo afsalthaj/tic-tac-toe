@@ -5,6 +5,23 @@ that lets you play a tic-tac-toe with the computer.
 
 The implementation is done in Ruby using the min-max algorithm.
 
+# Start playing
+* Install Ruby (Ex: In Mac, brew install ruby)
+* Clone the project 
+
+```
+
+git clone https://github.com/afsalthaj/tic-tac-toe
+
+```
+* Play game
+
+```
+cd tic-tac-toe
+ruby play.rb
+
+```
+
 # Strategy
 * Computer plays all the future games the moment you start the game.
 * Computer plays its initial move. This is inspired from many tic-tac-toe
@@ -26,12 +43,36 @@ Game class is responsible for keeping track of the state of the game.
 Obviously state of the game is represented by the player, the board and the 
 complete set of moves available at a point in time.
 
-# Reference
-* https://www.youtube.com/watch?v=zDskcx8FStA
-* https://www.quora.com/Is-there-a-simple-explanation-of-a-minimax-algorithm
-* https://en.wikipedia.org/wiki/Minimax (as a last resort)
-
 # Technical Debts
 * It seems the algorithm selected is quite advanced, and is not scalable.
 * The first iteration of every game starts in 20 seconds, which is not so good.
 * Remove command line and include a canvas
+
+# Test Coverage
+* All that I did here is, simulating a game in test case, and asserting each moves/possible moves.
+* Asserting each move/possible move is done intuitively and did't focus much on min-max algorithm.
+* The main parts of the project game file and game Runner. play file is just a game invoking command.
+
+Run tests by:
+
+```shell
+
+// In the root directory
+
+// Optional command
+brew install ruby
+bundle install
+
+//run tests
+ruby spec.rb
+
+// get the coverage report
+cd coverage
+open index.html
+
+```
+
+# Reference
+* https://www.youtube.com/watch?v=zDskcx8FStA
+* https://www.quora.com/Is-there-a-simple-explanation-of-a-minimax-algorithm
+* https://en.wikipedia.org/wiki/Minimax (as a last resort)
