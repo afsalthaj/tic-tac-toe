@@ -32,12 +32,12 @@ else minimum.
 * The computer player is hard-coded as :X and the user is identified as :O
 
 ## Pros 
-* Minimax algorithm is fairly intuitive and recursive.
-* Lets you build a strategy to win the game.
-* Computer always wins!
+* Minimax algorithm, from a high level perspective, is fairly intuitive 
+* It is always interesting to build a recursive algorithm.
+* Less code.
 
 ## Cons
-* Not so intuitive in code
+* Relatively a complex recursion once developed.
 * First stage computations taking time. Depth factor can be incorporated.
 
 # Game Runner
