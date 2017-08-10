@@ -94,7 +94,6 @@ class GameStrategy
     board = Array.new(9)
     first_game = Game.new(player, board)
     simulate_all_moves(first_game)
-    print (first_game.board)
     first_game
   end
 end

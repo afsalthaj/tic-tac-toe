@@ -32,6 +32,8 @@ class Projection
 end
 
 class GameRunner
+  attr_accessor :projection
+  attr_accessor :game
   def initialize(player, fake_game)
     @game = fake_game.nil? ? GameStrategy.new.simulate(player) : fake_game
     @permanent_state = @game
