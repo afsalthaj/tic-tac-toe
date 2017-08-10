@@ -85,8 +85,6 @@ class GameStrategy
     end
   end
 
-  #beginning of a game is generating all possible combinations and nodes.
-  # this tree is then used to track down the scores
   def generate
     initial_game_state = Game.new(:X, Array.new(9))
     generate_moves(initial_game_state)

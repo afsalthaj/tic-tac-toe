@@ -47,6 +47,7 @@ complete set of moves available at a point in time.
 * It seems the algorithm selected is quite advanced, and is not scalable.
 * The first iteration of every game starts in 20 seconds, which is not so good.
 * Remove command line and include a canvas
+* Mock command line input output testing ruby spec
 
 # Test Coverage
 * All that I did here is, simulating a game in test case, and asserting each moves/possible moves.
