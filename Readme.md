@@ -51,7 +51,7 @@ complete set of moves available at a point in time.
 # Test Coverage
 * All that I did here is, simulating a game in test case, and asserting each moves/possible moves.
 * Asserting each move/possible move is done intuitively and did't focus much on min-max algorithm.
-* The main parts of the project game file and game Runner. play file is just a game invoking command.
+* File "game.rb" and "game_runner.rb" are the ones tested. File "play.rb" is just invoking the game.
 
 Run tests by:
 
