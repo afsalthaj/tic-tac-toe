@@ -10,7 +10,7 @@ class GameState
   end
 
   def rank
-    @rank ||= final_state_rank || intermediate_state_rank
+    @rank = final_state_rank || intermediate_state_rank
   end
 
   def next_move
@@ -32,8 +32,8 @@ class GameState
     board.compact.size == 9 && winner.nil?
   end
 
+  # this is intermediate state.
   def intermediate_state_rank
-    # recursion, baby
     ranks = moves.collect{ |game_state| game_state.rank }
     if current_player == :X
       ranks.max
@@ -42,22 +42,38 @@ class GameState
     end
   end
 
+  def game_won?(player)
+    winning_sequences = [[0, 1, 2],
+                         [3, 4, 5],
+                         [6, 7, 8],
+                         [0, 3, 6],
+                         [1, 4, 7],
+                         [2, 5, 8],
+                         [0, 4, 8],
+                         [2, 4, 6]]
+    result = winning_sequences.each {|sequence|
+      if sequence.all? {|a| @board[a] == player}
+        return true
+      end
+    }
+    # not sure if there is any other easy way, to get around the truthy nature of Ruby conditional statements
+    if result == true
+      true
+    else
+      false
+    end
+  end
+
+
   def winner
-    @winner ||= [
-        # horizontal wins
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [6, 4, 2]
-    ].collect { |positions|
-      ( board[positions[0]] == board[positions[1]] &&
-          board[positions[1]] == board[positions[2]] &&
-          board[positions[0]] ) || nil
-    }.compact.first
+    @winner =
+        if game_won? :X
+          :X
+        elsif game_won? :O
+          :O
+        else
+          nil
+        end
   end
 end
 
@@ -84,35 +100,29 @@ class GameTree
 end
 
 class MainGame
+  attr_reader :game_state
+
   def initialize
-    @game_state = @initial_game_state = GameTree.new.generate
+    @game_state = GameTree.new.generate
   end
 
-  def turn
+  def play_the_game
     if @game_state.final_state?
       describe_final_game_state
-      puts "Play again? y/n"
-      answer = gets
-      if answer.downcase.strip == 'y'
-        @game_state = @initial_game_state
-        turn
-      else
-        exit
-      end
+      Process.exit(0)
     end
 
     if @game_state.current_player == :X
-      puts "\n==============="
       @game_state = @game_state.next_move
       puts "X's move:"
       display_board
-      turn
+      play_the_game
     else
       get_human_move
       puts "The result of your move:"
       display_board
       puts ""
-      turn
+      play_the_game
     end
   end
 
@@ -153,4 +163,4 @@ class MainGame
   end
 end
 
-MainGame.new.turn
+MainGame.new.play_the_game
