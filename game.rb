@@ -7,8 +7,8 @@ class Game
   attr_accessor :current_player
 
   def initialize(current_player, board)
-    @current_player = current_player
-    @board = board
+    @current_player = current_player.clone
+    @board = board.clone
     @moves = []
   end
 
