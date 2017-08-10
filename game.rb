@@ -9,12 +9,12 @@ class Game
     @moves = []
   end
 
-  def rank
-    @rank = final_state_rank || intermediate_state_rank
+  def score
+    @score = final_state_rank || intermediate_state_rank
   end
 
   def next_move
-    moves.max {|a, b| a.rank <=> b.rank}
+    moves.max {|a, b| a.score <=> b.score}
   end
 
   def final_state_rank
@@ -34,34 +34,24 @@ class Game
 
   # this is intermediate state.
   def intermediate_state_rank
-    ranks = moves.collect {|game_state| game_state.rank}
+    scores = moves.collect {|game_state| game_state.score}
     if current_player == :X
-      ranks.max
+      scores.max
     else
-      ranks.min
+      scores.min
     end
   end
 
   def game_won?(player)
-    winning_sequences = [[0, 1, 2],
-                         [3, 4, 5],
-                         [6, 7, 8],
-                         [0, 3, 6],
-                         [1, 4, 7],
-                         [2, 5, 8],
-                         [0, 4, 8],
-                         [2, 4, 6]]
-    result = winning_sequences.each {|sequence|
+    winning_sequences = [[0, 1, 2], [3, 4, 5], [6, 7, 8],
+                         [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                         [0, 4, 8], [2, 4, 6]]
+    winning_sequences.each {|sequence|
       if sequence.all? {|a| @board[a] == player}
         return true
       end
     }
-    # not sure if there is any other easy way, to get around the truthy nature of Ruby conditional statements
-    if result == true
-      true
-    else
-      false
-    end
+    false
   end
 
 

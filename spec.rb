@@ -1,11 +1,12 @@
 require 'simplecov'
 SimpleCov.start
+
 require './game'
 require './game_runner'
 require 'test/unit'
 
 class Spec < Test::Unit::TestCase
-  def test_if_game_is_winner
+  def test_if_game_has_winner
     super_game = Game.new(:X, Array.new(9))
     assert_equal( super_game.winner, nil)
     super_game = Game.new(:X, [:X, nil, nil, nil, :X, nil, nil, nil, :X])
@@ -66,5 +67,27 @@ class Spec < Test::Unit::TestCase
     next_game_state = next_game_state.get_node_in_move_tree(8)
     next_game_state = next_game_state.next_move
     assert(next_game_state.board[5] == :X || next_game_state.board[6] == :X)
+  end
+
+  def test_game_over
+    board = (0 ... 9 ).map {|_| :X}
+    game = Game.new(:X, board)
+    assert_not_nil ( game.game_over?)
+    super_game = Game.new(:X, [:O, :O, :O, nil, nil, nil, nil, nil, nil])
+    assert_not_nil(false, super_game.game_over?)
+  end
+
+  def test_game_won
+    board = [:X, nil, nil, nil, :X, nil, nil, nil, :X]
+    game = Game.new(:X, board)
+    assert (game.game_won? :X)
+    board = [:X, nil, nil, nil, nil, nil, nil, nil, :X]
+    game = Game.new(:X, board)
+    assert (!game.game_won?(:X))
+  end
+
+  def test_create_future_games
+    game_runner = GameStrategy.new
+    assert_not_nil(game_runner.generate)
   end
 end

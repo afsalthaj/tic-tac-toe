@@ -51,12 +51,12 @@ class GameRunner
 
     if @game_state.current_player == :X
       @game_state = @game_state.next_move
-      puts "X's move:"
+      puts "Board after Computer's move:"
       @projection.display_board(@game_state)
       play_the_game
     else
       right_move_from_user
-      puts "The result of your move:"
+      puts 'Board after your move:'
       @projection.display_board(@game_state)
       puts ""
       play_the_game
