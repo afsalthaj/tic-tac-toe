@@ -27,9 +27,9 @@ Obviously state of the game is represented by the player, the board and the
 complete set of moves available at a point in time.
 
 # Reference
-https://www.youtube.com/watch?v=zDskcx8FStA
-https://www.quora.com/Is-there-a-simple-explanation-of-a-minimax-algorithm
-https://en.wikipedia.org/wiki/Minimax (as a last resort)
+* https://www.youtube.com/watch?v=zDskcx8FStA
+* https://www.quora.com/Is-there-a-simple-explanation-of-a-minimax-algorithm
+* https://en.wikipedia.org/wiki/Minimax (as a last resort)
 
 # Technical Debts
 * It seems the algorithm selected is quite advanced, and is not scalable.
