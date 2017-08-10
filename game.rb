@@ -75,6 +75,10 @@ class Game
           nil
         end
   end
+
+  def get_node_in_move_tree(position_in_board)
+    @moves.select {|game_state| game_state.board[position_in_board] == :O}.first
+  end
 end
 
 class GameStrategy
@@ -91,6 +95,8 @@ class GameStrategy
     end
   end
 
+  #beginning of a game is generating all possible combinations and nodes.
+  # this tree is then used to track down the scores
   def generate
     initial_game_state = Game.new(:X, Array.new(9))
     generate_moves(initial_game_state)
