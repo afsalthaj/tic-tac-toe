@@ -79,6 +79,7 @@ end
 class GameStrategy
   def simulate_all_moves(game)
     next_player = (game.current_player == :X ? :O : :X)
+    valid_indices =  game.board.each_with_index.map{|player, index|}
     game.board.each_with_index do |player, index|
       unless player
         next_board = game.board.dup
