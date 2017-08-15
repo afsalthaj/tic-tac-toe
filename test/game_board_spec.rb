@@ -1,5 +1,5 @@
-require '../game_board/game_board.rb'
-require '../player.rb'
+require '../game/game_board.rb'
+require '../player/player.rb'
 require 'test/unit'
 
 class GameBoardSpec < Test::Unit::TestCase
