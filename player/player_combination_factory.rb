@@ -3,7 +3,6 @@ require './players_combination.rb'
 class PlayerCombinationFactory
   def set_name_if_not_nil(player_instance, name)
     unless name.nil?
-      # need to see if there is any other way of giving access to only factory classes.
       player_instance.send(:set_name, name)
     end
   end
