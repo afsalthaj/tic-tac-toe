@@ -42,13 +42,13 @@ class GameBoard
   end
 
   def winning_sequences
-    [get_first_row, get_second_row, get_third_row,
-     get_first_column, get_second_column, get_third_column,
-     get_diagonal_left_to_right, get_diagonal_right_to_left]
+    all_rows_indices.concat(all_columns_indices) <<
+        (diagonal_left_right_indices) << (diagonal_right_left_indices)
   end
 
   def any_winning_sequence_complete?
-    !winning_sequences.select {|sequence| sequence.same_values? && !sequence[0].nil?}.empty?
+    !winning_sequences.map{|x| get_elements_from_board(x)}
+         .select {|sequence| sequence.same_values? && !sequence[0].nil?}.empty?
   end
 
   def board_complete?
@@ -56,7 +56,7 @@ class GameBoard
   end
 
   def is_board_filled_in_the_index(index)
-    ! @board[index].nil?
+    !@board[index].nil?
   end
 
   def is_index_not_part_of_dimensions(index)
