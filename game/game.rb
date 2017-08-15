@@ -10,24 +10,11 @@ class Game
     @board = board.clone
   end
 
-  def game_won?(player)
-    @board.winning_sequences.each {|sequence|
-      if sequence.all? {|a| @board[a] == player.name}
-        return true
-      end
-    }
-    false
-  end
-
   def winner
-    @winner =
-        if game_won? :X
-          :X
-        elsif game_won? :O
-          :O
-        else
-          nil
-        end
+    winning_sequence = @board.any_winning_sequence_complete?
+    unless winning_sequence.nil?
+      @winner = winning_sequence.first
+    end
   end
 
   def game_over?
@@ -35,6 +22,6 @@ class Game
   end
 
   def draw?
-    board.compact.size == 9 && winner.nil?
+    board.no_more_positions_available? && winner.nil?
   end
 end

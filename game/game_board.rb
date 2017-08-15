@@ -1,8 +1,4 @@
 #!/usr/bin/env ruby
-# Please note first row second row or third row
-# doesn't change as you increase the board size
-# However, the design is focused on 3x3 matrix
-# We could split dimension class separately, but that sounds over-designing to me.
 # Separating the board validation is something that we can think of...hmmm... well..not now!
 
 class Array
@@ -28,16 +24,16 @@ class GameBoard
     end
   end
 
-  def play_the_board(index, name)
+  def play_the_board(index, player)
     if is_invalid_move?(index)
       raise BoardException, 'Invalid move, Please pick another position in the board'
     else
-      @board[index] = name
+      @board[index] = player
     end
   end
 
   def is_invalid_move?(index)
-    any_winning_sequence_complete? || board_complete? ||
+    any_winning_sequence_complete? || no_more_positions_available? ||
         is_board_filled_in_the_index(index) || is_index_not_part_of_dimensions(index)
   end
 
@@ -47,11 +43,11 @@ class GameBoard
   end
 
   def any_winning_sequence_complete?
-    !winning_sequences.map{|x| get_elements_from_board(x)}
-         .select {|sequence| sequence.same_values? && !sequence[0].nil?}.empty?
+    winning_sequences.map{|x| get_elements_from_board(x)}
+        .select {|sequence| sequence.same_values? && !sequence[0].nil?}[0]
   end
 
-  def board_complete?
+  def no_more_positions_available?
     @board.all?{|value| !value.nil?}
   end
 
@@ -89,6 +85,6 @@ class GameBoard
   end
 
   def reset_board
-    @board = Array.new(9)
+    @board = Array.new(@board.size)
   end
 end

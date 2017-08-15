@@ -29,68 +29,68 @@ class GameBoardSpec < Test::Unit::TestCase
 
   def test_if_an_empty_board_has_a_winner
     game_board = GameBoard.new(3)
-    assert_equal false, game_board.any_winning_sequence_complete?
+    assert_equal nil, game_board.any_winning_sequence_complete?
   end
 
   def test_arbitrary_filling_of_board_has_no_winner
     game_board = GameBoard.new(3)
     game_board.fill_indices_with_a_name([0, 2, 4], :X)
     game_board.fill_indices_with_a_name([6, 8], :O)
-    assert_equal false, game_board.any_winning_sequence_complete?
+    assert_equal nil, game_board.any_winning_sequence_complete?
   end
 
   def test_if_arbitrary_filling_of_board_results_in_winner
     game_board = GameBoard.new(3)
     game_board.fill_indices_with_a_name([0, 1, 2], nil)
-    assert_equal false, game_board.any_winning_sequence_complete?
+    assert_equal nil, game_board.any_winning_sequence_complete?
   end
 
   def test_if_a_board_has_winner_if_first_row_is_filled
     game_board = GameBoard.new(3)
     game_board.fill_indices_with_a_name(game_board.all_rows_indices[0], :X)
-    assert_equal true, game_board.any_winning_sequence_complete?
+    assert_equal [:X, :X, :X], game_board.any_winning_sequence_complete?
   end
 
   def test_if_a_board_has_winner_if_second_row_is_filled
     game_board = GameBoard.new(3)
     game_board.fill_indices_with_a_name(game_board.all_rows_indices[1], :X)
-    assert_equal true, game_board.any_winning_sequence_complete?
+    assert_equal [:X, :X, :X], game_board.any_winning_sequence_complete?
   end
 
   def test_if_a_board_has_winner_if_third_row_is_filled
     game_board = GameBoard.new(3)
     game_board.fill_indices_with_a_name(game_board.all_rows_indices[2], :X)
-    assert_equal true, game_board.any_winning_sequence_complete?
+    assert_equal [:X, :X, :X], game_board.any_winning_sequence_complete?
   end
 
   def test_if_a_board_has_winner_if_first_column_is_filled
     game_board = GameBoard.new(3)
     game_board.fill_indices_with_a_name(game_board.all_columns_indices[0], :X)
-    assert_equal true, game_board.any_winning_sequence_complete?
+    assert_equal [:X, :X, :X], game_board.any_winning_sequence_complete?
   end
 
   def test_if_a_board_has_winner_if_second_column_is_filled
     game_board = GameBoard.new(3)
     game_board.fill_indices_with_a_name(game_board.all_columns_indices[2], :X)
-    assert_equal true, game_board.any_winning_sequence_complete?
+    assert_equal [:X, :X, :X], game_board.any_winning_sequence_complete?
   end
 
   def test_if_a_board_has_winner_if_third_column_is_filled
     game_board = GameBoard.new(3)
     game_board.fill_indices_with_a_name(game_board.all_columns_indices[1], :X)
-    assert_equal true, game_board.any_winning_sequence_complete?
+    assert_equal [:X, :X, :X], game_board.any_winning_sequence_complete?
   end
 
   def test_if_a_board_has_winner_if_diagonal_left_right_is_filled
     game_board = GameBoard.new(3)
     game_board.fill_indices_with_a_name(game_board.diagonal_left_right_indices, :X)
-    assert_equal true, game_board.any_winning_sequence_complete?
+    assert_equal [:X, :X, :X], game_board.any_winning_sequence_complete?
   end
 
   def test_if_a_board_has_winner_if_diagonal_right_left_is_filled
     game_board = GameBoard.new(3)
     game_board.fill_indices_with_a_name(game_board.diagonal_right_left_indices, :X)
-    assert_equal true, game_board.any_winning_sequence_complete?
+    assert_equal [:X, :X, :X], game_board.any_winning_sequence_complete?
   end
 
   def test_board_exception_is_thrown_if_board_is_already_has_completed_winning
@@ -160,5 +160,15 @@ class GameBoardSpec < Test::Unit::TestCase
                   [8, 9, 10, 11], [12, 13, 14, 15], [0, 4, 8, 12],
                   [3, 7, 11, 15], [2, 6, 10, 14], [1, 5, 9, 13],
                   [0, 5, 10, 15], [3, 6, 9, 12]], game_board.winning_sequences
+  end
+
+  def test_fill_the_game_board_with_an_actual_player
+    player1 = ComputerPlayer.new
+    player2 = HumanPlayer.new
+    game_board = GameBoard.new(3)
+    game_board.play_the_board(3, player2)
+    game_board.fill_indices_with_a_name(game_board.all_rows_indices[0], player1)
+    assert(game_board.any_winning_sequence_complete?[0].is_a?(ComputerPlayer))
+    assert_equal(:X, game_board.any_winning_sequence_complete?[0].to_s)
   end
 end
