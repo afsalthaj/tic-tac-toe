@@ -16,8 +16,8 @@ end
 
 class GameBoard
   attr_accessor :board
-  def initialize
-    @board = Array.new(9)
+  def initialize(game_dimension)
+    @board = Array.new(game_dimension * game_dimension)
   end
 
   def set_board(board)
@@ -82,38 +82,6 @@ class GameBoard
 
   def get_elements_from_board(indices)
     indices.map {|index| @board[index]}
-  end
-
-  def get_first_row
-    get_elements_from_board(all_rows_indices[0])
-  end
-
-  def get_second_row
-    get_elements_from_board(all_rows_indices[1])
-  end
-
-  def get_third_row
-    get_elements_from_board(all_rows_indices[2])
-  end
-
-  def get_first_column
-    get_elements_from_board(all_columns_indices[0])
-  end
-
-  def get_second_column
-    get_elements_from_board(all_columns_indices[2])
-  end
-
-  def get_third_column
-    get_elements_from_board(all_columns_indices[1])
-  end
-
-  def get_diagonal_left_to_right
-    get_elements_from_board(diagonal_left_right_indices)
-  end
-
-  def get_diagonal_right_to_left
-    get_elements_from_board(diagonal_right_left_indices)
   end
 
   def fill_indices_with_a_name(indices, player)
