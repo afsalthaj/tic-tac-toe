@@ -69,7 +69,7 @@ class GameBoard
 
   def all_columns_indices
     (0 ... Math.sqrt(board.size)).map {|column_picker|
-    (0 ... @board.size).to_a.select{|x| ((x + column_picker) % Math.sqrt(@board.size)) == 0 }}
+      (0 ... @board.size).to_a.select{|x| ((x + column_picker) % Math.sqrt(@board.size)) == 0 }}
   end
 
   def diagonal_left_right_indices
