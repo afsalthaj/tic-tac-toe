@@ -5,7 +5,6 @@ require '../game/game_board'
 
 class MiniMaxStrategy < GameStrategy
   def initialize(game_board)
-    
 
   end
 

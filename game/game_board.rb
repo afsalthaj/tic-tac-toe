@@ -1,14 +1,5 @@
 #!/usr/bin/env ruby
 
-class Array
-  def same_values?
-    self.uniq.length == 1
-  end
-end
-
-class BoardException < RuntimeError
-end
-
 class GameBoard
   attr_accessor :board
 
@@ -79,4 +70,13 @@ class GameBoard
   def reset_board
     @board = Array.new(@board.size)
   end
+end
+
+class Array
+  def same_values?
+    self.uniq.length == 1
+  end
+end
+
+class BoardException < RuntimeError
 end
