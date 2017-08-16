@@ -15,9 +15,9 @@ class Player
 end
 
 class ComputerPlayer < Player
-  def initialize
-    super(:X)
-  end
+    def initialize
+      super(:X)
+    end
 end
 
 class HumanPlayer < Player

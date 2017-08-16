@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-# Separating the board validation is something that we can think of...hmmm... well..not now!
 
 class Array
   def same_values?
@@ -12,16 +11,9 @@ end
 
 class GameBoard
   attr_accessor :board
+
   def initialize(game_dimension)
     @board = Array.new(game_dimension * game_dimension)
-  end
-
-  def set_board(board)
-    if @board.size == board.size
-      @board = board
-    else
-      raise BoardException, "You have to ideally set a board with a size #{@board.size}"
-    end
   end
 
   def play_the_board(index, player)
@@ -34,7 +26,7 @@ class GameBoard
 
   def is_invalid_move?(index)
     any_winning_sequence_complete? || no_more_positions_available? ||
-        is_board_filled_in_the_index(index) || is_index_not_part_of_dimensions(index)
+        is_index_populated?(index) || is_index_not_part_of_dimensions(index)
   end
 
   def winning_sequences
@@ -51,7 +43,7 @@ class GameBoard
     @board.all?{|value| !value.nil?}
   end
 
-  def is_board_filled_in_the_index(index)
+  def is_index_populated?(index)
     !@board[index].nil?
   end
 
@@ -80,7 +72,7 @@ class GameBoard
     indices.map {|index| @board[index]}
   end
 
-  def fill_indices_with_a_name(indices, player)
+  def fill_indices_with_a_player(indices, player)
     indices.map {|index| play_the_board(index, player)}
   end
 

@@ -1,5 +1,5 @@
-require './players_combination.rb'
-require './player.rb'
+require '../player/players_combination.rb'
+require '../player/player.rb'
 require 'test/unit'
 
 class PlayersCombinationSpec < Test::Unit::TestCase
