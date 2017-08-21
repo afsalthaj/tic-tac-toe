@@ -5,8 +5,8 @@ require '../game/game_board'
 class GameRunner
   def initialize(ui, initial_player, player_combination)
     # currently game runner chooses the game dimension
-    @game = Game.new(@board, @initial_player)
     @board = GameBoard.new(3)
+    @game = Game.new(@board, @initial_player)
     @initial_player = initial_player
     @ui = ui
     @player_combination = player_combination
@@ -23,6 +23,7 @@ class GameRunner
   end
 
   def run_game
+    ui.display_board(@game.game)
     if @game.game_over?
       ui.notify_game_over(@game.board, @game.winner)
     elsif @game.current_player.is_a?(HumanPlayer)

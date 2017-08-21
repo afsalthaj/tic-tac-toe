@@ -11,7 +11,7 @@ class UserInterface
           'Asking the human player to move'
   end
 
-  def notify_game_over
+  def notify_game_over(board, winner)
     raise NotImplementedError,
           'Notfiying the human player and if need restart the game, or exit the process'
   end
