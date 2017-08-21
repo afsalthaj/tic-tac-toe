@@ -4,8 +4,34 @@ require '../player/player'
 require '../game/game_board'
 
 class MiniMaxStrategy < GameStrategy
-  def initialize(game_board)
 
+  def initialize(board, initial_player, player_combination)
+    @initial_player = initial_player
+    game = Game.new(initial_player, board)
+    @game_state = GameState.new(game)
+    @player_combination = player_combination
+    simulate_all_moves(@game_state)
+  end
+
+  def first_move(position_in_board)
+    if @initial_player.is_a?(ComputerPlayer)
+      next_move(nil)
+    else
+      @game_state.get_node_in_move_tree(position_in_board)
+    end
+    return @game_state.game
+  end
+
+  def next_move(position_in_board)
+    if @game_state.game.game_over?
+      # upto the game_runner to see if game is over, as different strategies may or may not raise a game_over message.
+      return @game_state.game
+    elsif @game_state.game.current_player.is_a?(ComputerPlayer)
+      @game_state.next_best_move
+    elsif
+      @game_state.get_node_in_move_tree(position_in_board)
+    end
+    return @game_state.game
   end
 
   class GameState
@@ -38,7 +64,7 @@ class MiniMaxStrategy < GameStrategy
     end
 
     def get_node_in_move_tree(position_in_board)
-      @moves.select {|game_state| game_state.game.board[position_in_board] == :O}.first
+      @moves.select {|game_state| game_state.game.board[position_in_board].is_a?(HumanPlayer)}.first
     end
 
     def next_best_move
@@ -49,7 +75,8 @@ class MiniMaxStrategy < GameStrategy
   end
 
   def simulate_all_moves(game_state)
-    next_player = (game_state.game.current_player == :X ? :O : :X)
+    next_player =
+        (game_state.game.current_player == @player_combination.player1 ? @player_combination.player2 : @player_combination.player1)
     game_state.game.board.each_with_index do |player, index|
       unless player
         next_board = game_state.game.board.dup
@@ -60,13 +87,5 @@ class MiniMaxStrategy < GameStrategy
         simulate_all_moves(next_game_state)
       end
     end
-  end
-
-  def simulate(player)
-    board = Array.new(9)
-    game = Game.new(player, board)
-    game_state = GameState.new(game)
-    simulate_all_moves(game_state)
-    game_state
   end
 end
