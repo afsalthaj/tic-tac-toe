@@ -1,4 +1,4 @@
-require './player.rb'
+require '../player/player.rb'
 
 class PlayersCombinationException < RuntimeError
 end

@@ -1,4 +1,4 @@
-require './players_combination.rb'
+require '../player/players_combination.rb'
 
 class PlayerCombinationFactory
   def set_name_if_not_nil(player_instance, name)

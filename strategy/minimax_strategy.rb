@@ -4,13 +4,21 @@ require '../player/player'
 require '../game/game_board'
 
 class MiniMaxStrategy < GameStrategy
-
-  def initialize(board, initial_player, player_combination)
+  def initialize(game_board, initial_player, player_combination)
     @initial_player = initial_player
-    game = Game.new(initial_player, board)
+    game = Game.new(initial_player, game_board)
     @game_state = GameState.new(game)
     @player_combination = player_combination
+    puts @game_state.game.game_board.is_a?(Array)
+  end
+
+  def fire
     simulate_all_moves(@game_state)
+    @game_state
+  end
+
+  def game
+    @game_state.game
   end
 
   def first_move(position_in_board)
@@ -32,6 +40,21 @@ class MiniMaxStrategy < GameStrategy
       @game_state.get_node_in_move_tree(position_in_board)
     end
     return @game_state.game
+  end
+
+  def simulate_all_moves(game_state)
+    print game_state.game.current_player
+    next_player = (game_state.game.current_player.is_a?(ComputerPlayer) ? HumanPlayer.new : ComputerPlayer.new)
+    game_state.game.game_board.board.each_with_index do |player, index|
+      unless player
+        next_board = game_state.game.game_board.dup
+        next_board.board[index] = game_state.game.current_player
+        new_game = Game.new(next_player, next_board)
+        next_game_state = GameState.new(new_game)
+        game_state.moves << next_game_state
+        simulate_all_moves(next_game_state)
+      end
+    end
   end
 
   class GameState
@@ -64,28 +87,13 @@ class MiniMaxStrategy < GameStrategy
     end
 
     def get_node_in_move_tree(position_in_board)
-      @moves.select {|game_state| game_state.game.board[position_in_board].is_a?(HumanPlayer)}.first
+      @moves.select {|game_state| game_state.game.game_board.board[position_in_board].is_a?(HumanPlayer)}.first
     end
 
     def next_best_move
       result = moves.map {|x| x.score}
       result_max = result.each_with_index.max[1]
       moves[result_max]
-    end
-  end
-
-  def simulate_all_moves(game_state)
-    next_player =
-        (game_state.game.current_player == @player_combination.player1 ? @player_combination.player2 : @player_combination.player1)
-    game_state.game.board.each_with_index do |player, index|
-      unless player
-        next_board = game_state.game.board.dup
-        next_board[index] = game_state.game.current_player
-        new_game = Game.new(next_player, next_board)
-        next_game_state = GameState.new(new_game)
-        game_state.moves << next_game_state
-        simulate_all_moves(next_game_state)
-      end
     end
   end
 end

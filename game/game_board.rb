@@ -1,9 +1,10 @@
 #!/usr/bin/env ruby
 
 class GameBoard
-  attr_accessor :board
+  attr_accessor :board, :game_dimension
 
   def initialize(game_dimension)
+    @game_dimension = game_dimension
     @board = Array.new(game_dimension * game_dimension)
   end
 
