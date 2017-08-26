@@ -5,22 +5,21 @@ require '../game/game_board'
 require '../player/player_combination_factory'
 
 class MiniMaxStrategy < GameStrategy
-  def initialize(initial_player, game_board)
+  def initialize(initial_player, player_combination, game_board)
     @initial_player = initial_player
+    @player_combination = player_combination
     @game_board = game_board
     @game = Game.new(initial_player, game_board)
     @game_state = GameState.new(@game)
-  end
-
-  def simulate
     simulate_all_moves(@game_state)
   end
 
   def first_move(position_in_board)
-    if @initial_player.is_a?(ComputerPlayer)
+    puts @game_state.moves.size
+    if @initial_player == "X"
       next_move(nil)
     else
-      @game_state = @game_state.get_node_in_move_tree(position_in_board)
+      @game_state.get_node_in_move_tree(position_in_board)
     end
     return @game_state.game
   end
@@ -29,12 +28,12 @@ class MiniMaxStrategy < GameStrategy
     if @game_state.game.game_over?
       # upto the game_runner to see if game is over, as different strategies may or may not raise a game_over message.
       return @game_state.game
-    elsif @game_state.game.current_player.is_a?(ComputerPlayer)
+    elsif @game_state.game.current_player == "X"
       @game_state = @game_state.next_best_move
     else
       @game_state = @game_state.get_node_in_move_tree(position_in_board)
     end
-    @game_state.game
+   # @game_state.game
   end
 
   class GameState
@@ -45,12 +44,10 @@ class MiniMaxStrategy < GameStrategy
     end
 
     def score
-      puts "m i here? 1"
       @score = final_score || intermediate_score
     end
 
     def intermediate_score
-      puts "m i here? 2"
       scores = moves.collect {|game_state| game_state.score}
       if @game.current_player == "X"
         scores.max
@@ -60,7 +57,6 @@ class MiniMaxStrategy < GameStrategy
     end
 
     def final_score
-      puts "m i here 3"
       if @game.game_over?
         if @game.draw?
           return 0
@@ -70,7 +66,7 @@ class MiniMaxStrategy < GameStrategy
     end
 
     def get_node_in_move_tree(position_in_board)
-      @moves.select {|game_state| game_state.game.game_board[position_in_board] == "O"}.first
+      x = @moves.select {|game_state| game_state.game.game_board.board[position_in_board] == "O"}.first
     end
 
     def next_best_move
@@ -102,7 +98,9 @@ end
 
 
 class Runner
-  strategy = MiniMaxStrategy.new("X", GameBoard.new(3, nil))
-  strategy.simulate
-  puts state
+  strategy = MiniMaxStrategy.new("X", nil,GameBoard.new(3, nil))
+  game = strategy.first_move(2)
+  print(game.game_board.board)
+ # strategy.simulate
+ # puts state
 end
