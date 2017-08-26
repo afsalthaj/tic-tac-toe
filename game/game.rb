@@ -1,6 +1,3 @@
-# A game is nothing but a state of board and player
-# Changing the game in terms of board and player is the responsibility of game strategy
-
 class Game
   attr_accessor :game_board
   attr_accessor :current_player
@@ -8,6 +5,14 @@ class Game
   def initialize(current_player, game_board)
     @current_player = current_player.clone
     @game_board = game_board.clone
+  end
+
+  def set_game_board(game_board)
+    @game_board = game_board
+  end
+
+  def set_current_player(current_player)
+    @current_player = current_player
   end
 
   def winner
@@ -24,4 +29,7 @@ class Game
   def game_over?
     winner || draw?
   end
+end
+
+class GameException < RuntimeError
 end

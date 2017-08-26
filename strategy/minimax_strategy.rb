@@ -3,13 +3,14 @@ require '../game/game'
 require '../player/player'
 require '../game/game_board'
 require '../player/player_combination_factory'
+require '../utils/utils'
 
 class MiniMaxStrategy < GameStrategy
-  def initialize(initial_player, player_combination, game_board)
-    @initial_player = initial_player
+  attr_accessor :game
+  def initialize(player_combination, game_board)
     @player_combination = player_combination
     @game_board = game_board
-    @game = Game.new(initial_player, game_board)
+    @game = Game.new(player_combination.initial_player, game_board)
     @game_state = GameState.new(@game)
     simulate_all_moves(@game_state)
   end
@@ -67,16 +68,13 @@ class MiniMaxStrategy < GameStrategy
   end
 
   def simulate_all_moves(game_state)
-    next_player = (game_state.game.current_player.to_s == @player_combination.player1.to_s ?  @player_combination.player2 :  @player_combination.player1)
-    #puts next_player
-    #print game_state.game.game_board.board
+    next_player = (game_state.game.current_player.to_s == @player_combination.player1.to_s ?
+                       @player_combination.player2 :  @player_combination.player1)
     game_state.game.game_board.board.each_with_index do |player, index|
       unless player
-        new_game_board = game_state.game.game_board.dup
-        new_board = new_game_board.board.dup
-        new_board[index] = game_state.game.current_player
-        next_game_board = GameBoard.new(3, new_board)
-        new_game = Game.new(next_player, next_game_board)
+        new_game_board = Utils.deep_copy(game_state.game.game_board)
+        new_game_board.play_the_board(index, game_state.game.current_player)
+        new_game = Game.new(next_player, new_game_board)
         next_game_state = GameState.new(new_game)
         game_state.moves << next_game_state
         simulate_all_moves(next_game_state)
@@ -88,21 +86,25 @@ end
 
 
 class Runner
-    # run your code here
+  # run your code here
   player_combination = PlayerCombinationFactory.new.get_computer_and_human(nil, nil)
-  puts player_combination.player1
-  puts player_combination.player2
-  strategy =MiniMaxStrategy.new(player_combination.player1, player_combination,GameBoard.new(3, nil))
+  player_combination.set_initial_player(player_combination.player1)
+  strategy = MiniMaxStrategy.new(player_combination, GameBoard.new(3))
   game = strategy.next_move(nil)
-  #print(game.game_board.board)
-  game = strategy.next_move(2)
-  #print (game.game_board.board)
+  puts "*********After computer******************"
+  print(game.game_board.board, "\n")
+  game = strategy.next_move(7)
+  puts "**********After human*****************"
+  print(game.game_board.board, "\n")
   game = strategy.next_move(nil)
-  #print game.game_board.board
+  puts "**********After Computer*****************"
+  print(game.game_board.board, "\n")
   game = strategy.next_move(4)
-  #print game.game_board.board
+  puts "**********After human*****************"
+  print(game.game_board.board, "\n")
   game = strategy.next_move(nil)
-  print game.game_board.board.map{|x| x.to_s}
-    # strategy.simulate
- # puts state
+  puts "**********After computer*****************"
+  print(game.game_board.board, "\n")
+  # strategy.simulate
+  # puts state
 end

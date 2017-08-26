@@ -1,4 +1,4 @@
-class Game
+class Games
   attr_accessor :board
   attr_accessor :current_player
 

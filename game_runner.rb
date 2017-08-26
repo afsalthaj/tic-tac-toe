@@ -32,7 +32,7 @@ class Projection
 end
 
 
-class GameRunner
+class GameRunners
   attr_accessor :projection
   attr_accessor :game
 
