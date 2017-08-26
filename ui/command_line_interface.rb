@@ -8,8 +8,12 @@ class CommandLine < UserInterface
     player_combination_factory = PlayerCombinationFactory.new
     player_combination = player_combination_factory.get_computer_and_human(nil, nil)
     status = gets.chomp
-    initial_player = status == 'y' ? player_combination.player2 : player_combination.player1
-    game_runner = GameRunner.new(self, initial_player, player_combination)
+    if status == 'y'
+      player_combination.set_initial_player(player_combination.player2)
+    else
+      player_combination.set_initial_player(player_combination.player1)
+    end
+    game_runner = GameRunner.new(self, player_combination)
     game_runner.run_game
   end
 
@@ -20,7 +24,7 @@ class CommandLine < UserInterface
 
   def get_position_from_human_player
     move = gets.chomp
-    return move
+    return move.to_i
   end
 
   def handle_wrong_moves
@@ -45,6 +49,7 @@ class CommandLine < UserInterface
       puts row.join('|')
       puts '------------------'
     end
+    puts "===================================================="
   end
 
   def notify_game_over(board, winner)

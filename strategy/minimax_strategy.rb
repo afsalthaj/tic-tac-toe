@@ -3,42 +3,34 @@ require '../game/game'
 require '../player/player'
 require '../game/game_board'
 require '../player/player_combination_factory'
+require '../utils/utils'
 
+# strategy where player combination is always going to be computer and human, and no other combination works
 class MiniMaxStrategy < GameStrategy
-  def initialize(initial_player, player_combination, game_board)
-    @initial_player = initial_player
+  attr_accessor :game
+  def initialize(player_combination, game_board)
     @player_combination = player_combination
     @game_board = game_board
-    @game = Game.new(initial_player, game_board)
-    @game_state = GameState.new(@game)
+    @game = Game.new(player_combination.initial_player, game_board)
+    @game_state = GameState.new(@game, @player_combination)
     simulate_all_moves(@game_state)
-  end
-
-  def first_move(position_in_board)
-    puts @game_state.moves.size
-    if @initial_player == "X"
-      next_move(nil)
-    else
-      @game_state.get_node_in_move_tree(position_in_board)
-    end
-    return @game_state.game
   end
 
   def next_move(position_in_board)
     if @game_state.game.game_over?
-      # upto the game_runner to see if game is over, as different strategies may or may not raise a game_over message.
-      return @game_state.game
-    elsif @game_state.game.current_player == "X"
+      @game_state.game
+    elsif @game_state.game.current_player.to_s == @player_combination.player1.to_s
       @game_state = @game_state.next_best_move
     else
       @game_state = @game_state.get_node_in_move_tree(position_in_board)
     end
-   # @game_state.game
+    @game_state.game
   end
 
   class GameState
     attr_accessor :score, :moves, :game
-    def initialize(game)
+    def initialize(game, player_combination)
+      @player_combination = player_combination
       @game = game
       @moves = []
     end
@@ -49,7 +41,7 @@ class MiniMaxStrategy < GameStrategy
 
     def intermediate_score
       scores = moves.collect {|game_state| game_state.score}
-      if @game.current_player == "X"
+      if @game.current_player.to_s == @player_combination.player1.to_s
         scores.max
       else
         scores.min
@@ -61,12 +53,12 @@ class MiniMaxStrategy < GameStrategy
         if @game.draw?
           return 0
         end
-        @game.winner == "X" ? 1 : -1
+        @game.winner == @player_combination.player1.to_s ? 1 : -1
       end
     end
 
     def get_node_in_move_tree(position_in_board)
-      x = @moves.select {|game_state| game_state.game.game_board.board[position_in_board] == "O"}.first
+      x = @moves.select {|game_state| game_state.game.game_board.board[position_in_board] == @player_combination.player2.to_s}.first
     end
 
     def next_best_move
@@ -77,17 +69,13 @@ class MiniMaxStrategy < GameStrategy
   end
 
   def simulate_all_moves(game_state)
-    next_player = (game_state.game.current_player == "X" ? "O" : "X")
-    #puts next_player
-    #print game_state.game.game_board.board
+    next_player = (game_state.game.current_player.to_s == @player_combination.player1.to_s ?  @player_combination.player2 :  @player_combination.player1)
     game_state.game.game_board.board.each_with_index do |player, index|
       unless player
-        new_game_board = game_state.game.game_board.dup
-        new_board = new_game_board.board.dup
-        new_board[index] = game_state.game.current_player
-        next_game_board = GameBoard.new(3, new_board)
-        new_game = Game.new(next_player, next_game_board)
-        next_game_state = GameState.new(new_game)
+        new_game_board = Utils.deep_copy(game_state.game.game_board)
+        new_game_board.board[index] = game_state.game.current_player.to_s
+        new_game = Game.new(next_player, new_game_board)
+        next_game_state = GameState.new(new_game, @player_combination)
         game_state.moves << next_game_state
         simulate_all_moves(next_game_state)
       end
@@ -95,12 +83,26 @@ class MiniMaxStrategy < GameStrategy
   end
 end
 
-
-
+=begin
 class Runner
-  strategy = MiniMaxStrategy.new("X", nil,GameBoard.new(3, nil))
-  game = strategy.first_move(2)
-  print(game.game_board.board)
+  player_combination = PlayerCombinationFactory.new.get_computer_and_human(nil, nil)
+  player_combination.set_initial_player(player_combination.player1)
+  strategy = MiniMaxStrategy.new(player_combination,GameBoard.new(3))
+  game = strategy.next_move(nil)
+  print(game.game_board.board, "\n")
+  game = strategy.next_move(7)
+  print(game.game_board.board, "\n")
+  game = strategy.next_move(nil)
+  print(game.game_board.board, "\n")
+  game = strategy.next_move(2)
+  print(game.game_board.board, "\n")
+  game = strategy.next_move(nil)
+  print(game.game_board.board, "\n")
+  game = strategy.next_move(1)
+  print(game.game_board.board, "\n")
+  game = strategy.next_move(nil)
+  print(game.game_board.board, "\n")
  # strategy.simulate
  # puts state
 end
+=end

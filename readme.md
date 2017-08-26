@@ -18,14 +18,13 @@ git clone https://github.com/afsalthaj/tic-tac-toe
 
 ```
 cd tic-tac-toe
-ruby play.rb
+cd ui
+ruby command_line_interface.rb
 
 ```
 
 # Strategy
 * Computer plays all the future games the moment you start the game.
-* Computer plays its initial move. This is inspired from many tic-tac-toe
-games available in the internet. I consider this as a limitation and will fix it soon.
 * Computer ranks all the moves, and depending the player, it choose the move
 with either the maximum score, or minimum score. Maximum score if next move is "Computer's"
 else minimum.
@@ -73,7 +72,6 @@ open index.html
 # Todo:
 * It seems the algorithm selected is quite advanced, and is not scalable.
 * The first iteration of every game starts in 20 seconds, which is not so good.
-* Remove command line and include a canvas
 * The first selection of player carried over to the rest of the games. This is to be made flexible
 * Mock command line input output testing rspec
 

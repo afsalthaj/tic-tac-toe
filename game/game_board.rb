@@ -3,13 +3,9 @@
 class GameBoard
   attr_accessor :board, :game_dimension
 
-  def initialize(game_dimension, board)
+  def initialize(game_dimension)
     @game_dimension = game_dimension
-    @board = if board.nil?
-               Array.new(game_dimension * game_dimension)
-             else
-               board
-             end
+    @board =Array.new(game_dimension * game_dimension)
   end
 
   def play_the_board(index, player)
