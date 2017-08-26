@@ -105,4 +105,14 @@ class GameStrategy
 end
 
 
-print GameStrategy.new.simulate(:X).next_best_move.game.board
+
+class Runner
+  game_state = GameStrategy.new.simulate(:X)
+  # run your code here
+  game_state = game_state.next_best_move
+  print(game_state.game.board)
+  game_state = game_state.get_node_in_move_tree(2)
+  print(game_state.game.board)
+  # strategy.simulate
+  # puts state
+end

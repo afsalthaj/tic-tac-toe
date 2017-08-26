@@ -16,7 +16,7 @@ class MiniMaxStrategy < GameStrategy
 
   def first_move(position_in_board)
     puts @game_state.moves.size
-    if @initial_player == "X"
+    if @initial_player.is_a?(ComputerPlayer)
       next_move(nil)
     else
       @game_state.get_node_in_move_tree(position_in_board)
@@ -28,12 +28,12 @@ class MiniMaxStrategy < GameStrategy
     if @game_state.game.game_over?
       # upto the game_runner to see if game is over, as different strategies may or may not raise a game_over message.
       return @game_state.game
-    elsif @game_state.game.current_player == "X"
+    elsif @game_state.game.current_player.is_a?(ComputerPlayer)
       @game_state = @game_state.next_best_move
     else
       @game_state = @game_state.get_node_in_move_tree(position_in_board)
     end
-   # @game_state.game
+    @game_state.game
   end
 
   class GameState
@@ -49,7 +49,7 @@ class MiniMaxStrategy < GameStrategy
 
     def intermediate_score
       scores = moves.collect {|game_state| game_state.score}
-      if @game.current_player == "X"
+      if @game.current_player.is_a?(ComputerPlayer)
         scores.max
       else
         scores.min
@@ -61,12 +61,12 @@ class MiniMaxStrategy < GameStrategy
         if @game.draw?
           return 0
         end
-        @game.winner == "X" ? 1 : -1
+        @game.winner.is_a?(ComputerPlayer) ? 1 : -1
       end
     end
 
     def get_node_in_move_tree(position_in_board)
-      x = @moves.select {|game_state| game_state.game.game_board.board[position_in_board] == "O"}.first
+      x = @moves.select {|game_state| game_state.game.game_board.board[position_in_board].is_a?(HumanPlayer)}.first
     end
 
     def next_best_move
@@ -77,7 +77,7 @@ class MiniMaxStrategy < GameStrategy
   end
 
   def simulate_all_moves(game_state)
-    next_player = (game_state.game.current_player == "X" ? "O" : "X")
+    next_player = (game_state.game.current_player.to_s == @player_combination.player1.to_s ?  @player_combination.player2 :  @player_combination.player1)
     #puts next_player
     #print game_state.game.game_board.board
     game_state.game.game_board.board.each_with_index do |player, index|
@@ -98,9 +98,15 @@ end
 
 
 class Runner
-  strategy = MiniMaxStrategy.new("X", nil,GameBoard.new(3, nil))
-  game = strategy.first_move(2)
+    # run your code here
+  player_combination = PlayerCombinationFactory.new.get_computer_and_human(nil, nil)
+  puts player_combination.player1
+  puts player_combination.player2
+  strategy =MiniMaxStrategy.new(player_combination.player1, player_combination,GameBoard.new(3, nil))
+  game = strategy.first_move(nil)
   print(game.game_board.board)
- # strategy.simulate
+  game = strategy.next_move(2)
+  print (game.game_board.board)
+  # strategy.simulate
  # puts state
 end
