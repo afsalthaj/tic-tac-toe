@@ -14,16 +14,6 @@ class MiniMaxStrategy < GameStrategy
     simulate_all_moves(@game_state)
   end
 
-  def first_move(position_in_board)
-    puts @game_state.moves.size
-    if @initial_player.is_a?(ComputerPlayer)
-      next_move(nil)
-    else
-      @game_state.get_node_in_move_tree(position_in_board)
-    end
-    return @game_state.game
-  end
-
   def next_move(position_in_board)
     if @game_state.game.game_over?
       # upto the game_runner to see if game is over, as different strategies may or may not raise a game_over message.
@@ -103,10 +93,16 @@ class Runner
   puts player_combination.player1
   puts player_combination.player2
   strategy =MiniMaxStrategy.new(player_combination.player1, player_combination,GameBoard.new(3, nil))
-  game = strategy.first_move(nil)
-  print(game.game_board.board)
+  game = strategy.next_move(nil)
+  #print(game.game_board.board)
   game = strategy.next_move(2)
-  print (game.game_board.board)
-  # strategy.simulate
+  #print (game.game_board.board)
+  game = strategy.next_move(nil)
+  #print game.game_board.board
+  game = strategy.next_move(4)
+  #print game.game_board.board
+  game = strategy.next_move(nil)
+  print game.game_board.board.map{|x| x.to_s}
+    # strategy.simulate
  # puts state
 end
