@@ -1,11 +1,10 @@
-#!/usr/bin/env ruby
-
 class Game
   attr_accessor :board
   attr_accessor :current_player
 
   def initialize(current_player, board)
-    @current_player = current_player.clone
+    puts "here"
+    @current_player = current_player
     @board = board.clone
   end
 
@@ -84,10 +83,13 @@ class GameStrategy
 
   def simulate_all_moves(game_state)
     next_player = (game_state.game.current_player == :X ? :O : :X)
+    puts next_player
+    print game_state.game.board
     game_state.game.board.each_with_index do |player, index|
       unless player
         next_board = game_state.game.board.dup
         next_board[index] = game_state.game.current_player
+        next_game_board = GameState.new(board)
         new_game = Game.new(next_player, next_board)
         next_game_state = GameState.new(new_game)
         game_state.moves << next_game_state
@@ -104,3 +106,6 @@ class GameStrategy
     game_state
   end
 end
+
+
+GameStrategy.new.simulate(:X)

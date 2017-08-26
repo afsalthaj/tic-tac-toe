@@ -15,7 +15,7 @@ class GameRunners
     @initial_player = initial_player
     @ui = ui
     @player_combination = player_combination
-    @strategy = MiniMaxStrategy.new(@game_board, initial_player,player_combination)
+    @strategy = MiniMaxStrategy.new(initial_player, player_combination,game_board)
     @game = @strategy.game
     print @game.game_board
     @board_position = nil
@@ -48,10 +48,9 @@ end
 
 
 class Runner
-  x = MiniMaxStrategy.new(
-      GameBoard.new(3), ComputerPlayer.new,
-      PlayerCombinationFactory.new.get_computer_and_human(nil, nil))
+  strategy = MiniMaxStrategy.new(ComputerPlayer.new,
+                          PlayerCombinationFactory.new.get_computer_and_human(nil, nil),
+                          GameBoard.new(3))
 
-  puts("machinesssssssssssssssssss")
-  x.fire
+  strategy.simulate
 end

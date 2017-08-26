@@ -17,11 +17,11 @@ class Game
     end
   end
 
-  def game_over?
-    winner || draw?
-  end
-
   def draw?
     @game_board.no_more_positions_available? && winner.nil?
+  end
+
+  def game_over?
+    winner || draw?
   end
 end

@@ -2,30 +2,25 @@ require '../strategy/game_strategy'
 require '../game/game'
 require '../player/player'
 require '../game/game_board'
+require '../player/player_combination_factory'
 
 class MiniMaxStrategy < GameStrategy
-  def initialize(game_board, initial_player, player_combination)
+  def initialize(initial_player, game_board)
     @initial_player = initial_player
-    game = Game.new(initial_player, game_board)
-    @game_state = GameState.new(game)
-    @player_combination = player_combination
-    puts @game_state.game.game_board.is_a?(Array)
+    @game_board = game_board
+    @game = Game.new(initial_player, game_board)
+    @game_state = GameState.new(@game)
   end
 
-  def fire
+  def simulate
     simulate_all_moves(@game_state)
-    @game_state
-  end
-
-  def game
-    @game_state.game
   end
 
   def first_move(position_in_board)
     if @initial_player.is_a?(ComputerPlayer)
       next_move(nil)
     else
-      @game_state.get_node_in_move_tree(position_in_board)
+      @game_state = @game_state.get_node_in_move_tree(position_in_board)
     end
     return @game_state.game
   end
@@ -35,26 +30,11 @@ class MiniMaxStrategy < GameStrategy
       # upto the game_runner to see if game is over, as different strategies may or may not raise a game_over message.
       return @game_state.game
     elsif @game_state.game.current_player.is_a?(ComputerPlayer)
-      @game_state.next_best_move
-    elsif
-      @game_state.get_node_in_move_tree(position_in_board)
+      @game_state = @game_state.next_best_move
+    else
+      @game_state = @game_state.get_node_in_move_tree(position_in_board)
     end
-    return @game_state.game
-  end
-
-  def simulate_all_moves(game_state)
-    print game_state.game.current_player
-    next_player = (game_state.game.current_player.is_a?(ComputerPlayer) ? HumanPlayer.new : ComputerPlayer.new)
-    game_state.game.game_board.board.each_with_index do |player, index|
-      unless player
-        next_board = game_state.game.game_board.dup
-        next_board.board[index] = game_state.game.current_player
-        new_game = Game.new(next_player, next_board)
-        next_game_state = GameState.new(new_game)
-        game_state.moves << next_game_state
-        simulate_all_moves(next_game_state)
-      end
-    end
+    @game_state.game
   end
 
   class GameState
@@ -65,12 +45,14 @@ class MiniMaxStrategy < GameStrategy
     end
 
     def score
+      puts "m i here? 1"
       @score = final_score || intermediate_score
     end
 
     def intermediate_score
+      puts "m i here? 2"
       scores = moves.collect {|game_state| game_state.score}
-      if @game.current_player.is_a?(ComputerPlayer)
+      if @game.current_player == "X"
         scores.max
       else
         scores.min
@@ -78,16 +60,17 @@ class MiniMaxStrategy < GameStrategy
     end
 
     def final_score
+      puts "m i here 3"
       if @game.game_over?
         if @game.draw?
           return 0
         end
-        @game.winner.is_a?(ComputerPlayer) ? 1 : -1
+        @game.winner == "X" ? 1 : -1
       end
     end
 
     def get_node_in_move_tree(position_in_board)
-      @moves.select {|game_state| game_state.game.game_board.board[position_in_board].is_a?(HumanPlayer)}.first
+      @moves.select {|game_state| game_state.game.game_board[position_in_board] == "O"}.first
     end
 
     def next_best_move
@@ -96,4 +79,30 @@ class MiniMaxStrategy < GameStrategy
       moves[result_max]
     end
   end
+
+  def simulate_all_moves(game_state)
+    next_player = (game_state.game.current_player == "X" ? "O" : "X")
+    #puts next_player
+    #print game_state.game.game_board.board
+    game_state.game.game_board.board.each_with_index do |player, index|
+      unless player
+        new_game_board = game_state.game.game_board.dup
+        new_board = new_game_board.board.dup
+        new_board[index] = game_state.game.current_player
+        next_game_board = GameBoard.new(3, new_board)
+        new_game = Game.new(next_player, next_game_board)
+        next_game_state = GameState.new(new_game)
+        game_state.moves << next_game_state
+        simulate_all_moves(next_game_state)
+      end
+    end
+  end
+end
+
+
+
+class Runner
+  strategy = MiniMaxStrategy.new("X", GameBoard.new(3, nil))
+  strategy.simulate
+  puts state
 end

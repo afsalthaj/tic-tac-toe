@@ -10,18 +10,18 @@ class Player
   end
 
   def to_s
-    name
+    name.to_s
   end
 end
 
 class ComputerPlayer < Player
     def initialize
-      super(:X)
+      super("X")
     end
 end
 
 class HumanPlayer < Player
   def initialize
-    super(:O)
+    super("O")
   end
 end
