@@ -19,7 +19,7 @@ git clone https://github.com/afsalthaj/tic-tac-toe
 ```
 cd tic-tac-toe
 cd ui
-ruby command_line_interface.rb
+ruby command_line_game.rb
 
 ```
 
