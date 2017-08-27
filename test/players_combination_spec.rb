@@ -36,7 +36,7 @@ class PlayersCombinationSpec < Test::Unit::TestCase
     player2 = HumanPlayer.new
     players_combination = PlayersCombination.new(player1, player2)
     assert_equal :X, players_combination.player1.name
-    assert_equal :O, players_combination.player2.name
+    assert_equal "O", players_combination.player2.name
   end
 
   def test_creating_different_players_combination_with_computer_default_name_and_human_custom_name
@@ -44,7 +44,7 @@ class PlayersCombinationSpec < Test::Unit::TestCase
     player2 = HumanPlayer.new
     player2.set_name(:O)
     players_combination = PlayersCombination.new(player1, player2)
-    assert_equal :X, players_combination.player1.name
+    assert_equal "X", players_combination.player1.name
     assert_equal :O, players_combination.player2.name
   end
 

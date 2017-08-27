@@ -18,7 +18,6 @@ class GameRunner
       @ui.notify_game_over(@game.game_board, @game.winner)
     else
       if @game.current_player.is_a?(HumanPlayer)
-        puts "identified as uman"
         board_position = @ui.notify_move_and_return_position
         begin
           @game = @strategy.next_move(board_position)
@@ -26,7 +25,6 @@ class GameRunner
           @ui.handle_wrong_moves
         end
       else
-        print @game.game_board.board, "\n"
         @game = @strategy.next_move(nil)
       end
       run_game

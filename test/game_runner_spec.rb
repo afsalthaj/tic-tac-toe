@@ -50,7 +50,6 @@ class GameRunnerSpec < Test::Unit::TestCase
     end
 
     def switch_player(current_player)
-      print "does this come here?"
       current_player.to_s == @player_combination.player1.to_s ? @player_combination.player2 : @player_combination.player1
     end
   end

@@ -1,6 +1,6 @@
-require './player_combination_factory.rb'
-require './players_combination.rb'
-require './player.rb'
+require '../player/player_combination_factory'
+require '../player/players_combination'
+require '../player/player'
 require 'test/unit'
 
 class PlayersCombinationFactorySpec < Test::Unit::TestCase
