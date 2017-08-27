@@ -46,4 +46,13 @@ class GameSpec < Test::Unit::TestCase
     game = Game.new(:X, game_board)
     assert game.draw?
   end
+
+  def test_complete_index_or_winner_results_in_game_over
+    game_board = GameBoard.new(3)
+    game_board.board.fill("X")
+    game = Game.new("X", game_board)
+    assert(game.game_over?)
+    game_board.set_board([:X, :O, :X, :O, :X, :O, :O , :X, :O])
+    assert(game.game_over?)
+  end
 end

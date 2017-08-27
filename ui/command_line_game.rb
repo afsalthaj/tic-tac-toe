@@ -24,7 +24,7 @@ class CommandLineGame < UserInterface
     end
   end
 
-  def notify_move
+  def notify_move_and_return_position
     puts 'Please enter your next position in the board'
     get_position_from_human_player
   end

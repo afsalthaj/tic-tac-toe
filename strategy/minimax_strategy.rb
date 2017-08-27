@@ -7,7 +7,7 @@ require '../utils/utils'
 
 # strategy where player combination is always going to be computer and human, and no other combination works
 class MiniMaxStrategy < GameStrategy
-  attr_accessor :game
+
   def initialize(player_combination, game_board)
     @player_combination = player_combination
     @game_board = game_board

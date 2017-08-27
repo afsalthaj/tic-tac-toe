@@ -3,21 +3,21 @@
 class UserInterface
   def display_board(board)
     raise NotImplementedError,
-          'All user interfaces should publish'
+          'All user interfaces should publish display board'
   end
 
-  def notify_move
+  def notify_move_and_return_position
     raise NotImplementedError,
-          'Asking the human player to move'
+          'All user interfaces should be able to notify the user to move, and return the new position'
   end
 
   def handle_wrong_moves
     raise NotImplementedError,
-          'Handle wrong moves from user, returning a new position'
+          'All user interfaces should handle wrong moves from the user'
   end
 
   def notify_game_over(board, winner)
     raise NotImplementedError,
-          'Notfiying the human player and if need restart the game, or exit the process'
+          'All user interfaces should notify if game is over, and either Exit or continue with game runner'
   end
 end

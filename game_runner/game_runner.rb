@@ -17,7 +17,7 @@ class GameRunner
     if @game.game_over?
       @ui.notify_game_over(@game.game_board, @game.winner)
     elsif @game.current_player.is_a?(HumanPlayer)
-      board_position = @ui.notify_move
+      board_position = @ui.notify_move_and_return_position
       begin
         @game = @strategy.next_move(board_position)
       rescue BoardException => ex
