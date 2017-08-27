@@ -18,16 +18,20 @@ class GameRunner
       @ui.notify_game_over(@game.game_board, @game.winner)
     else
       if @game.current_player.is_a?(HumanPlayer)
-        board_position = @ui.notify_move_and_return_position
-        begin
-          @game = @strategy.next_move(board_position)
-        rescue BoardException => ex
-          @ui.handle_wrong_moves
-        end
+        handle_human_move
       else
         @game = @strategy.next_move(nil)
       end
       run_game
+    end
+  end
+
+  def handle_human_move
+    board_position = @ui.notify_move_and_return_position
+    begin
+      @game = @strategy.next_move(board_position)
+    rescue BoardException => ex
+      @ui.handle_wrong_moves
     end
   end
 end
