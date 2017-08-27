@@ -2,24 +2,35 @@ require '../ui/user_interface'
 require '../game_runner/game_runner'
 require '../player/player_combination_factory'
 
-class CommandLine < UserInterface
+class CommandLineGame < UserInterface
   def trigger_game_runner
     puts "Do you want to play? 'y'"
     player_combination_factory = PlayerCombinationFactory.new
     player_combination = player_combination_factory.get_computer_and_human(nil, nil)
     status = gets.chomp
+    set_initial_player(player_combination, status)
+    @game_board = GameBoard.new(3)
+    # We could ask user and set a difficulty level, and use the strategy
+    strategy = MiniMaxStrategy.new(player_combination, @game_board)
+    game_runner = GameRunner.new(self, strategy)
+    game_runner.run_game
+  end
+
+  def set_initial_player(player_combination, status)
     if status == 'y'
       player_combination.set_initial_player(player_combination.player2)
     else
       player_combination.set_initial_player(player_combination.player1)
     end
-    game_runner = GameRunner.new(self, player_combination)
-    game_runner.run_game
   end
 
   def notify_move
     puts 'Please enter your next position in the board'
     get_position_from_human_player
+  end
+
+  def set_game_difficulty
+    puts "Choose the level of difficulty of game"
   end
 
   def get_position_from_human_player
@@ -28,8 +39,7 @@ class CommandLine < UserInterface
   end
 
   def handle_wrong_moves
-    puts 'You have made a wrong move, Choose a position which is empty'
-    get_position_from_human_player
+    puts 'You have made a wrong move, You must be choosing a position which is empty'
   end
 
   def display_board(game_board)
@@ -57,7 +67,7 @@ class CommandLine < UserInterface
     message = winner.nil? ? 'Its a draw' : "the winner is #{winner}"
     puts message
     display_board(board)
-    puts 'Wanna play again? if so enter '
+    puts "Do you want to play again? if so enter 'y'"
     status = gets.chomp
     if status ==  'y'
       trigger_game_runner
@@ -67,4 +77,4 @@ class CommandLine < UserInterface
   end
 end
 
-CommandLine.new.trigger_game_runner
+CommandLineGame.new.trigger_game_runner

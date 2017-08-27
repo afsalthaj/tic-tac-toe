@@ -10,7 +10,7 @@ class GameBoard
 
   def play_the_board(index, player)
     if is_invalid_move?(index)
-      raise BoardException, 'Invalid move, Please pick another position in the board'
+      raise BoardException
     else
       @board[index] = player
     end
@@ -74,7 +74,7 @@ class GameBoard
   end
 
   def reset_board
-    @board = Array.new(@board.size)
+    @board.fill(nil)
   end
 end
 
@@ -85,4 +85,7 @@ class Array
 end
 
 class BoardException < RuntimeError
+  def initialize(msg="Invalid move, Please pick another position in the board")
+    super
+  end
 end

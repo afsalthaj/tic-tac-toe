@@ -6,12 +6,10 @@ require '../player/player_combination_factory'
 #Game Runner acts as a middleware between UI and actual Game.
 
 class GameRunner
-  def initialize(ui, player_combination)
-    @game_board = GameBoard.new(3)
+  def initialize(ui, strategy)
     @ui = ui
-    @strategy = MiniMaxStrategy.new(player_combination, @game_board)
-    @game = @strategy.game
-    @board_position = nil
+    @strategy = strategy
+    @game = strategy.game
   end
 
   def run_game
@@ -19,8 +17,12 @@ class GameRunner
     if @game.game_over?
       @ui.notify_game_over(@game.game_board, @game.winner)
     elsif @game.current_player.is_a?(HumanPlayer)
-      @board_position = @ui.notify_move
-      @game = @strategy.next_move(@board_position)
+      board_position = @ui.notify_move
+      begin
+        @game = @strategy.next_move(board_position)
+      rescue BoardException => ex
+        @ui.handle_wrong_moves
+      end
     else
       @game = @strategy.next_move(nil)
     end

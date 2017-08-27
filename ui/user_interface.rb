@@ -13,7 +13,7 @@ class UserInterface
 
   def handle_wrong_moves
     raise NotImplementedError,
-          'Handle wrong moves from user'
+          'Handle wrong moves from user, returning a new position'
   end
 
   def notify_game_over(board, winner)
