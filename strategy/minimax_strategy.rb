@@ -19,7 +19,7 @@ class MiniMaxStrategy < GameStrategy
   def next_move(position_in_board)
     if @game_state.game.game_over?
       @game_state.game
-    elsif @game_state.game.current_player.to_s == @player_combination.player1.to_s
+    elsif @game_state.game.current_player.is_a?(ComputerPlayer)
       @game_state = @game_state.next_best_move
     else
       if @game_state.game.game_board.is_invalid_move?(position_in_board)

@@ -10,6 +10,10 @@ class Game
     @game_board = game_board.clone
   end
 
+  def set_current_player(current_player)
+    @current_player = current_player
+  end
+
   # returns the name of the winner since we store only name in game board instead of objects
   def winner
     winning_sequence = @game_board.any_winning_sequence_complete?

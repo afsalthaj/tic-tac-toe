@@ -3,7 +3,7 @@
 class UserInterface
   def display_board(board)
     raise NotImplementedError,
-          'All user interfaces should publish display board'
+          'All user interfaces should implement display board'
   end
 
   def notify_move_and_return_position

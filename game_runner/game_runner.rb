@@ -16,16 +16,20 @@ class GameRunner
     @ui.display_board(@game.game_board)
     if @game.game_over?
       @ui.notify_game_over(@game.game_board, @game.winner)
-    elsif @game.current_player.is_a?(HumanPlayer)
-      board_position = @ui.notify_move_and_return_position
-      begin
-        @game = @strategy.next_move(board_position)
-      rescue BoardException => ex
-        @ui.handle_wrong_moves
-      end
     else
-      @game = @strategy.next_move(nil)
+      if @game.current_player.is_a?(HumanPlayer)
+        puts "identified as uman"
+        board_position = @ui.notify_move_and_return_position
+        begin
+          @game = @strategy.next_move(board_position)
+        rescue BoardException => ex
+          @ui.handle_wrong_moves
+        end
+      else
+        print @game.game_board.board, "\n"
+        @game = @strategy.next_move(nil)
+      end
+      run_game
     end
-    run_game
   end
 end
