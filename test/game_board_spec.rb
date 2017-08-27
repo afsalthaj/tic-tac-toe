@@ -166,6 +166,9 @@ class GameBoardSpec < Test::Unit::TestCase
     assert_raise BoardException do
       game_board.play_the_board(-9, :O)
     end
+    assert_raise BoardException do
+      game_board.play_the_board(nil, :O)
+    end
     #not sure why, to be discussed with hamish
     #assert_raise BoardException  do game_board.play_the_board(1.1, :O) end
   end
@@ -178,6 +181,6 @@ class GameBoardSpec < Test::Unit::TestCase
     game_board.play_the_board(3, player2)
     game_board.fill_indices_with_a_player(game_board.all_rows_indices[0], player1)
     assert(game_board.any_winning_sequence_complete?[0].is_a?(ComputerPlayer))
-    assert_equal(:X, game_board.any_winning_sequence_complete?[0].to_s)
+    assert_equal("X", game_board.any_winning_sequence_complete?[0].to_s)
   end
 end

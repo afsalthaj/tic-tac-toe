@@ -22,7 +22,7 @@ class GameBoard
   end
 
   def is_invalid_move?(index)
-    any_winning_sequence_complete? || no_more_positions_available? ||
+    index.nil? || any_winning_sequence_complete? || no_more_positions_available? ||
         is_index_populated?(index) || is_index_not_part_of_dimensions(index)
   end
 
