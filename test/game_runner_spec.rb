@@ -32,10 +32,9 @@ class GameRunnerSpec < Test::Unit::TestCase
   end
 
   class DummyStrategy < GameStrategy
-    def initialize(player_combination, game_board)
+    def initialize(player_combination, game)
       @player_combination = player_combination
-      @game_board = game_board
-      @game = Game.new(player_combination.initial_player, game_board)
+      @game = game
     end
 
     def next_move(position_in_board)
@@ -45,7 +44,7 @@ class GameRunnerSpec < Test::Unit::TestCase
         next_player = switch_player(@game.current_player)
         @game.game_board.play_the_board(position_in_board, @game.current_player.to_s)
         @game.set_current_player(next_player)
-        self.game
+        @game
       end
     end
 
@@ -60,8 +59,9 @@ class GameRunnerSpec < Test::Unit::TestCase
     game_board = GameBoard.new(3)
     game_board.play_the_board(6, player_combination.player1.to_s)
     game_board.play_the_board(1, player_combination.player2.to_s)
-    strategy = MiniMaxStrategy.new(player_combination, game_board)
-    game_runner = GameRunner.new(FakeUi.new, strategy)
+    game = Game.new(player_combination.initial_player, game_board)
+    strategy = MiniMaxStrategy.new(player_combination, game)
+    game_runner = GameRunner.new(FakeUi.new, strategy, game)
     assert_equal(game_runner.run_game, "the exit message is game over and the winner is X")
   end
 
@@ -71,8 +71,9 @@ class GameRunnerSpec < Test::Unit::TestCase
     game_board = GameBoard.new(3)
     game_board.play_the_board(6, player_combination.player1.to_s)
     game_board.play_the_board(1, player_combination.player2.to_s)
-    strategy = MiniMaxStrategy.new(player_combination, game_board)
-    game_runner = GameRunner.new(FakeUi.new, strategy)
+    game = Game.new(player_combination.initial_player, game_board)
+    strategy = MiniMaxStrategy.new(player_combination, game)
+    game_runner = GameRunner.new(FakeUi.new, strategy, game)
     assert(game_runner.run_game =~ /the exit message is game over and the winner is/)
   end
 
@@ -82,8 +83,9 @@ class GameRunnerSpec < Test::Unit::TestCase
     game_board = GameBoard.new(3)
     game_board.play_the_board(6, player_combination.player1.to_s)
     game_board.play_the_board(1, player_combination.player2.to_s)
-    strategy = DummyStrategy.new(player_combination, game_board)
-    game_runner = GameRunner.new(FakeUi.new, strategy)
+    game = Game.new(player_combination.initial_player, game_board)
+    strategy = DummyStrategy.new(player_combination, game)
+    game_runner = GameRunner.new(FakeUi.new, strategy, game)
     assert(game_runner.run_game =~ /the exit message is game over and the winner is/)
   end
 end
