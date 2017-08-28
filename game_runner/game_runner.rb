@@ -17,12 +17,16 @@ class GameRunner
     if @game.game_over?
       @ui.notify_game_over(@game.game_board, @game.winner)
     else
-      if @game.current_player.is_a?(HumanPlayer)
-        handle_human_move
-      else
-        @game = @strategy.next_move(nil)
-      end
+      handle_board_movements
       run_game
+    end
+  end
+
+  def handle_board_movements
+    if @game.current_player.is_a?(HumanPlayer)
+      handle_human_move
+    else
+      @game = @strategy.next_move(nil)
     end
   end
 
