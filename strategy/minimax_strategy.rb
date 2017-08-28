@@ -7,11 +7,9 @@ require '../utils/utils'
 
 # strategy where player combination is always going to be computer and human, and no other combination works
 class MiniMaxStrategy < GameStrategy
-
-  def initialize(player_combination, game_board)
+  def initialize(player_combination, game)
     @player_combination = player_combination
-    @game_board = game_board
-    @game = Game.new(player_combination.initial_player, game_board)
+    @game = game
     @game_state = GameState.new(@game, @player_combination)
     simulate_all_moves(@game_state)
   end
@@ -19,7 +17,8 @@ class MiniMaxStrategy < GameStrategy
   def next_move(position_in_board)
     if @game_state.game.game_over?
       @game_state.game
-    elsif @game_state.game.current_player.is_a?(ComputerPlayer)
+    elsif @game_state.game.current_player.to_s == @player_combination.player1.to_s ||
+        @game_state.game.current_player.is_a?(ComputerPlayer)
       @game_state = @game_state.next_best_move
     else
       if @game_state.game.game_board.is_invalid_move?(position_in_board)

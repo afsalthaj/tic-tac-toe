@@ -10,9 +10,10 @@ class CommandLineGame < UserInterface
     status = gets.chomp
     set_initial_player(player_combination, status)
     @game_board = GameBoard.new(3)
+    game = Game.new(player_combination.initial_player, @game_board)
     # We could ask user and set a difficulty level, and use the strategy
-    strategy = MiniMaxStrategy.new(player_combination, @game_board)
-    game_runner = GameRunner.new(self, strategy)
+    strategy = MiniMaxStrategy.new(player_combination, game)
+    game_runner = GameRunner.new(self, strategy, game)
     game_runner.run_game
   end
 

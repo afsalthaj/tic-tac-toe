@@ -6,10 +6,10 @@ require '../player/player_combination_factory'
 #Game Runner acts as a middleware between UI and actual Game.
 
 class GameRunner
-  def initialize(ui, strategy)
+  def initialize(ui, strategy, game)
     @ui = ui
     @strategy = strategy
-    @game = strategy.game
+    @game = game
   end
 
   def run_game
