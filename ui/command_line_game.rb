@@ -1,5 +1,7 @@
 require '../ui/user_interface'
 require '../game_runner/game_runner'
+require '../strategy/easy_strategy'
+require '../strategy/minimax_strategy'
 require '../player/player_combination_factory'
 
 class CommandLineGame < UserInterface
@@ -11,8 +13,17 @@ class CommandLineGame < UserInterface
     set_initial_player(player_combination, status)
     @game_board = GameBoard.new(3)
     game = Game.new(player_combination.initial_player, @game_board)
-    # We could ask user and set a difficulty level, and use the strategy
-    strategy = MiniMaxStrategy.new(player_combination, game)
+    puts "Choose strategy. ( 1 or 2? )"
+    puts "----------------"
+    puts "1. Level 1"
+    puts "2. Level 2"
+    puts "----------------"
+    level = gets.chomp
+    if level.to_i == 1
+      strategy = MiniMaxStrategy.new(player_combination, game)
+    else
+      strategy = EasyStrategy.new(player_combination, game)
+    end
     game_runner = GameRunner.new(self, strategy, game)
     game_runner.run_game
   end

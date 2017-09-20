@@ -4,25 +4,17 @@ require '../game/game_board.rb'
 require '../player/player_combination_factory'
 require '../strategy/minimax_strategy'
 require 'test/unit'
+require '../utils/utils'
 
 class MinmaxStrategySpec < Test::Unit::TestCase
-  def test_strategy_doesnt_change_the_game_if_game_over
-    player_combination = PlayerCombinationFactory.new.get_computer_and_human(nil, nil)
-    player_combination.set_initial_player(player_combination.player1)
-    game_board = GameBoard.new(3)
-    game_board.board.fill(player_combination.player1.to_s)
-    strategy = MiniMaxStrategy.new(player_combination, game_board)
-    assert_equal(strategy.game.game_board.board.to_a, Array.new(9).fill("X"))
-    assert_equal(strategy.game.current_player.to_s, player_combination.player1.to_s)
-  end
-
   def test_strategy_tries_to_move_to_winning_position_given_a_game
     player_combination = PlayerCombinationFactory.new.get_computer_and_human(nil, nil)
     player_combination.set_initial_player(player_combination.player1)
     game_board = GameBoard.new(3)
     game_board.play_the_board(0, player_combination.player1.to_s)
     game_board.play_the_board(4, player_combination.player1.to_s)
-    strategy = MiniMaxStrategy.new(player_combination, game_board)
+    game = Game.new(player_combination.initial_player, game_board)
+    strategy = MiniMaxStrategy.new(player_combination, game)
     game = strategy.next_move(nil)
     assert_equal(game.winner, "X")
   end
@@ -31,7 +23,8 @@ class MinmaxStrategySpec < Test::Unit::TestCase
     player_combination = PlayerCombinationFactory.new.get_computer_and_human(nil, nil)
     player_combination.set_initial_player(player_combination.player1)
     board = ["O", "O", nil, nil, nil, nil, "X", nil, "X"]
-    strategy = MiniMaxStrategy.new(player_combination, GameBoard.new(3).set_board(board))
+    game = Game.new(player_combination.initial_player, GameBoard.new(3).set_board(board))
+    strategy = MiniMaxStrategy.new(player_combination, game)
     game = strategy.next_move(nil)
     assert_equal(game.game_board.board[7], player_combination.player1.to_s)
   end
@@ -42,7 +35,8 @@ class MinmaxStrategySpec < Test::Unit::TestCase
     game_board = GameBoard.new(3)
     game_board.play_the_board(0, player_combination.player1.to_s)
     game_board.play_the_board(4, player_combination.player1.to_s)
-    strategy = MiniMaxStrategy.new(player_combination, game_board)
+    game = Game.new(player_combination.initial_player, game_board)
+    strategy = MiniMaxStrategy.new(player_combination, game)
     game = strategy.next_move(nil)
     assert_equal(game.winner, player_combination.player1.to_s)
   end
@@ -53,7 +47,8 @@ class MinmaxStrategySpec < Test::Unit::TestCase
     game_board = GameBoard.new(3)
     game_board.play_the_board(6, player_combination.player2.to_s)
     game_board.play_the_board(7, player_combination.player2.to_s)
-    strategy = MiniMaxStrategy.new(player_combination, game_board)
+    game = Game.new(player_combination.initial_player, game_board)
+    strategy = MiniMaxStrategy.new(player_combination, game)
     game = strategy.next_move(nil)
     assert_equal(game.game_board.board[8], player_combination.player1.to_s)
   end
@@ -65,7 +60,8 @@ class MinmaxStrategySpec < Test::Unit::TestCase
     game_board.play_the_board(6, player_combination.player2.to_s)
     game_board.play_the_board(7, player_combination.player1.to_s)
     game_board.play_the_board(8, player_combination.player2.to_s)
-    strategy = MiniMaxStrategy.new(player_combination, game_board)
+    game = Game.new(player_combination.initial_player, game_board)
+    strategy = MiniMaxStrategy.new(player_combination, game)
     strategy.next_move(nil)
     assert_raises BoardException do strategy.next_move(6) end
   end
@@ -77,7 +73,8 @@ class MinmaxStrategySpec < Test::Unit::TestCase
     game_board.play_the_board(6, player_combination.player2.to_s)
     game_board.play_the_board(7, player_combination.player1.to_s)
     game_board.play_the_board(8, player_combination.player2.to_s)
-    strategy = MiniMaxStrategy.new(player_combination, game_board)
+    game = Game.new(player_combination.initial_player, game_board)
+    strategy = MiniMaxStrategy.new(player_combination, game)
     # computer making its first move
     strategy.next_move(nil)
     # user making its move
@@ -96,8 +93,49 @@ class MinmaxStrategySpec < Test::Unit::TestCase
     game_board.play_the_board(6, player_combination.player2.to_s)
     game_board.play_the_board(7, player_combination.player1.to_s)
     game_board.play_the_board(8, player_combination.player2.to_s)
-    strategy = MiniMaxStrategy.new(player_combination, game_board)
+    game = Game.new(player_combination.initial_player, game_board)
+    strategy = MiniMaxStrategy.new(player_combination, game)
     game = strategy.next_move(nil)
     assert_equal(player_combination.player2.to_s, game.current_player.to_s)
+  end
+
+  def test_computer_always_win_or_draw_when_computer_plays_first_move
+    player_combination = PlayerCombinationFactory.new.get_computer_and_human(nil, nil)
+    game_board = GameBoard.new(3)
+    player_combination.set_initial_player(player_combination.player1)
+    game = Game.new(player_combination.initial_player, game_board)
+    strategy = MiniMaxStrategy.new(player_combination, game)
+    iterate_all_games(game, strategy, player_combination)
+  end
+
+  def test_computer_always_win_or_draw_when_human_plays_first_move
+    player_combination = PlayerCombinationFactory.new.get_computer_and_human(nil, nil)
+    game_board = GameBoard.new(3)
+    # To reduce the time consumption in running all games.
+    # It reduces the number of assertions from 681 to 118.
+    game_board.play_the_board((0 ... 9).to_a.sample, player_combination.player1.to_s)
+    player_combination.set_initial_player(player_combination.player2)
+    game = Game.new(player_combination.initial_player, game_board)
+    strategy = MiniMaxStrategy.new(player_combination, game)
+    iterate_all_games(game, strategy, player_combination)
+  end
+
+  def iterate_all_games(game, strategy, player_combination)
+    if game.game_over?
+      assert(game.winner == player_combination.player1.to_s || game.draw?)
+    elsif game.current_player.is_a?(ComputerPlayer)
+      new_game = Utils.deep_copy(game)
+      new_strategy=MiniMaxStrategy.new(player_combination, new_game)
+      next_game = new_strategy.next_move(nil)
+      iterate_all_games(next_game, new_strategy, player_combination)
+    else
+     game.game_board.board.each_with_index.select{|player, index|player.nil?}
+     .map { |_, index|
+        new_game = Utils.deep_copy(game)
+        new_strategy=MiniMaxStrategy.new(player_combination, new_game)
+        next_game=new_strategy.next_move(index)
+        iterate_all_games(next_game, new_strategy, player_combination)
+      }
+    end
   end
 end

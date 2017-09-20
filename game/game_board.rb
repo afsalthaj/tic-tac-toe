@@ -48,6 +48,10 @@ class GameBoard
     !(0 ... board.size).include?(index)
   end
 
+  def empty_indices
+    board.each_with_index.select{|x, index| x.nil?}.map {|_, index| index }
+  end
+
   def all_rows_indices
     (0 ... @board.size).to_a.each_slice(Math.sqrt(@board.size)).to_a
   end
