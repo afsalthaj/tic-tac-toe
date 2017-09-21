@@ -15,11 +15,11 @@ class CommandLineGame < UserInterface
     game = Game.new(player_combination.initial_player, @game_board)
     puts "Choose strategy. ( 1 or 2? )"
     puts "----------------"
-    puts "1. Level 1"
-    puts "2. Level 2"
+    puts "1. Level 1: Easy"
+    puts "2. Level 2: Difficult"
     puts "----------------"
     level = gets.chomp
-    if level.to_i == 1
+    if level.to_i == 2
       strategy = MiniMaxStrategy.new(player_combination, game)
     else
       strategy = EasyStrategy.new(player_combination, game)

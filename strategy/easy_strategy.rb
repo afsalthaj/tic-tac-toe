@@ -20,15 +20,11 @@ class EasyStrategy < GameStrategy
     else
       @game.game_board.play_the_board(position_in_board, @game.current_player.to_s)
     end
-    @game.current_player=switch_player(@game.current_player)
+    @game.current_player=switch_player(@game.current_player, @player_combination)
     @game
   end
 
   def get_random_position_in_board
     @game.game_board.empty_indices.sample
-  end
-
-  def switch_player(current_player)
-    current_player.to_s == @player_combination.player1.to_s ? @player_combination.player2 : @player_combination.player1
   end
 end

@@ -8,4 +8,8 @@ class GameStrategy
     raise NotImplementedError,
           'All strategies of game should define the next move, and returns a game'
   end
+
+  def switch_player(current_player, player_combination)
+    current_player.to_s == player_combination.player1.to_s ? player_combination.player2 : player_combination.player1
+  end
 end

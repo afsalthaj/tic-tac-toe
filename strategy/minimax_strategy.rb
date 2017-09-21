@@ -85,7 +85,7 @@ class MiniMaxStrategy < GameStrategy
   end
 
   def simulate_all_moves(game_state)
-    next_player = switch_player(game_state.game.current_player)
+    next_player = switch_player(game_state.game.current_player, @player_combination)
     game_state.game.game_board.board.each_with_index do |player, index|
       unless player
         new_game_board = Utils.deep_copy(game_state.game.game_board)
@@ -96,9 +96,5 @@ class MiniMaxStrategy < GameStrategy
         simulate_all_moves(next_game_state)
       end
     end
-  end
-
-  def switch_player(current_player)
-    current_player.to_s == @player_combination.player1.to_s ? @player_combination.player2 : @player_combination.player1
   end
 end
